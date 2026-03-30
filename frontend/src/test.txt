@@ -1,0 +1,272 @@
+import './MusicPlayer.css';
+import {useState,useContext,useEffect} from 'react';
+import { MyContext } from './MyContext';
+
+
+function MusicPlayer(){
+
+    const {currentSong,audioUrl,setAudioUrl,audioRef }=useContext(MyContext)
+    const [isPlaying,setIsPlaying]=useState(false);
+    const [progress,setProgress]=useState(0);
+    const [currentTime,setCurrentTime]=useState(0);
+    const [duration,setDuration]=useState(0);
+    const [volume,setVolume]=useState(1);
+    
+  
+    const togglePlay=()=>{
+       if(!audioRef.current)return;
+
+       if(isPlaying){
+        audioRef.current.pause();
+       }else{
+         audioRef.current.play();
+       }
+       setIsPlaying(!isPlaying);
+    }
+    const  handleTimeUpdate=()=>{
+        const current=audioRef.current.currentTime;
+        const duration=audioRef.current.duration;
+        setCurrentTime(current);
+        setDuration(duration);
+        setProgress((current/duration)*100);
+        
+    }
+    const handleSeek=(e)=>{
+        const value=e.target.value;
+        audioRef.current.currentTime=(value/100)*audioRef.current.duration;
+        setProgress(value);
+    }
+    const formatTime=(time)=>{
+        if(!time)return "00:00";
+
+        const minutes=Math.floor(time/60);
+        const seconds=Math.floor(time%60);
+
+        return `${minutes}:${seconds<10?"0":""}${seconds}`;
+    }
+
+    const handleVolume=(e)=>{
+      const value=e.target.value;
+      setVolume(value);
+      audioRef.current.volume=value;
+    }
+  
+    useEffect(()=>{
+      if(!currentSong)return;
+
+      const fetchAudio =async()=>{
+        try{
+          const res=await fetch(`http://localhost:3000/stream?url=${currentSong.url}`);
+          const data=await res.json();
+          setAudioUrl(data.audioUrl);
+
+        }catch(err){
+           return res.status(500).json({error:"Could Fetch song"});
+        }
+      };
+      fetchAudio();
+    },[currentSong]);
+
+    useEffect(()=>{
+     if(audioUrl&&audioRef.current){
+       audioRef.current.play();
+       setIsPlaying(true);
+       setProgress(0);
+     }
+    },[audioUrl]);
+
+    return(
+        <div className='music-player'>
+           {audioUrl&&
+                <audio 
+              src={audioUrl}
+              ref={audioRef}
+              onTimeUpdate={handleTimeUpdate}
+              />
+           }
+           <div className='player-left'>
+                 <img src={currentSong?.thumbnail||"./cover"}/>
+                  <div className='player-left-text'>
+                    <p style={{margin:0}}>{currentSong?.title || "No song"}</p>
+                    <span>{currentSong?.uploader || ""}</span>
+                  </div>
+           </div>
+           <div className='player-center'>
+               <div className='controls'>
+                 <i className="fa-solid fa-backward"></i>
+                 <i className={` fa-solid ${isPlaying?"fa-pause":"fa-play"} `}
+                 onClick={togglePlay}
+                 ></i>
+                 <i className="fa-solid fa-forward"></i>
+               </div>
+               
+               <input
+                type='range'
+                value={progress}
+                onChange={handleSeek}
+                />
+                <div className="time">
+                  <span>{formatTime(currentTime)}</span>
+                  <span>{formatTime(duration)}</span>
+                </div>
+
+           </div>
+           <div className='player-right'>
+              <i 
+              className={`fa-solid ${volume==0?"fa-volume-xmark":"fa-volume-high"}`}
+              onClick={()=>{
+                if(volume==0){
+                  audioRef.current.volume=1;
+                  setVolume(1);
+                }else{
+                   audioRef.current.volume=0;
+                   setVolume(0);
+                }
+              }}
+              ></i>
+              <input
+              type='range'
+              min={0}
+              max={1}
+              step={0.01}
+              value={volume}
+              onChange={handleVolume}
+              />
+           </div>
+        </div>
+    )
+}
+export default MusicPlayer;
+
+
+
+// import './MusicPlayer.css';
+// import {  useState, useContext, useEffect } from 'react';
+// import { MyContext } from './MyContext';
+
+// function MusicPlayer() {
+//   const { currentSong, audioUrl, setAudioUrl, audioRef,isPlaying, setIsPlaying } = useContext(MyContext);
+//   const [progress, setProgress] = useState(0);
+//   const [currentTime, setCurrentTime] = useState(0);
+//   const [duration, setDuration] = useState(0);
+//   const [volume, setVolume] = useState(1);
+
+//   const togglePlay = () => {
+//     if (!audioRef.current) return;
+//     if (isPlaying) {
+//       audioRef.current.pause();
+//     } else {
+//       audioRef.current.play();
+//     }
+//     setIsPlaying(!isPlaying);
+//   };
+
+//   const handleTimeUpdate = () => {
+//     const current = audioRef.current.currentTime;
+//     const dur = audioRef.current.duration;
+//     setCurrentTime(current);
+//     setDuration(dur);
+//     setProgress((current / dur) * 100);
+//   };
+
+//   const handleSeek = (e) => {
+//     const value = e.target.value;
+//     audioRef.current.currentTime = (value / 100) * audioRef.current.duration;
+//     setProgress(value);
+//   };
+
+//   const formatTime = (time) => {
+//     if (!time) return "00:00";
+//     const minutes = Math.floor(time / 60);
+//     const seconds = Math.floor(time % 60);
+//     return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+//   };
+
+//   const handleVolume = (e) => {
+//     const value = e.target.value;
+//     setVolume(value);
+//     audioRef.current.volume = value;
+//   };
+
+//   useEffect(() => {
+//     if (!currentSong) return;
+
+//     // ── KEY CHANGE ──────────────────────────────────────────────────────────
+//     // Instead of fetching { audioUrl } from /stream and setting it as src,
+//     // we point the <audio> directly at our proxy endpoint on localhost.
+//     // The browser streams from localhost → no CORS issue → analyser works.
+//     const proxyUrl = `http://localhost:3000/stream?url=${encodeURIComponent(currentSong.url)}`;
+//     setAudioUrl(proxyUrl);
+//     // ───────────────────────────────────────────────────────────────────────
+//   }, [currentSong]);
+
+//   useEffect(() => {
+//     if (audioUrl && audioRef.current) {
+//       audioRef.current.play();
+//       setIsPlaying(true);
+//       setProgress(0);
+//     }
+//   }, [audioUrl]);
+
+//   return (
+//     <div className='music-player'>
+//       {audioUrl && (
+//         <audio
+//           src={audioUrl}
+//           ref={audioRef}
+//           onTimeUpdate={handleTimeUpdate}
+//           crossOrigin="anonymous"   // ← required for Web Audio API to read the stream
+//         />
+//       )}
+
+//       <div className='player-left'>
+//         <img src={currentSong?.thumbnail || "./cover"} alt="cover" />
+//         <div className='player-left-text'>
+//           <p style={{ margin: 0 }}>{currentSong?.title || "No song"}</p>
+//           <span>{currentSong?.uploader || ""}</span>
+//         </div>
+//       </div>
+
+//       <div className='player-center'>
+//         <div className='controls'>
+//           <i className="fa-solid fa-backward"></i>
+//           <i
+//             className={`fa-solid ${isPlaying ? "fa-pause" : "fa-play"}`}
+//             onClick={togglePlay}
+//           ></i>
+//           <i className="fa-solid fa-forward"></i>
+//         </div>
+//         <input type='range' value={progress} onChange={handleSeek} />
+//         <div className="time">
+//           <span>{formatTime(currentTime)}</span>
+//           <span>{formatTime(duration)}</span>
+//         </div>
+//       </div>
+
+//       <div className='player-right'>
+//         <i
+//           className={`fa-solid ${volume == 0 ? "fa-volume-xmark" : "fa-volume-high"}`}
+//           onClick={() => {
+//             if (volume == 0) {
+//               audioRef.current.volume = 1;
+//               setVolume(1);
+//             } else {
+//               audioRef.current.volume = 0;
+//               setVolume(0);
+//             }
+//           }}
+//         ></i>
+//         <input
+//           type='range'
+//           min={0}
+//           max={1}
+//           step={0.01}
+//           value={volume}
+//           onChange={handleVolume}
+//         />
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default MusicPlayer;

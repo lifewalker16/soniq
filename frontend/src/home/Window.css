@@ -1,0 +1,33 @@
+.window{
+    background-color: #212121; 
+    height: 93vh ;
+    width: 100%;
+}
+.nav{
+    height: 8vh;
+    width: 100%;
+    display: flex;
+   justify-content: center; 
+   align-items: center; 
+   
+}
+
+.search-container {
+  position: relative;
+  width: 70%;
+
+}
+
+.search-bar {
+  width: 100%;
+  border-radius: 1.5rem; 
+  padding: 10px 10px 10px 35px; /* left padding for icon */
+  background-color: aliceblue;
+}
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: gray;
+}

@@ -1,0 +1,114 @@
+.results{
+   position: absolute;
+   top:7.5%;
+   left:38%;
+   background-color: #2a2a2a;
+   border-radius:1rem ;
+   display: flex;
+   padding: 2px;
+   flex-direction: column;
+   border: 1px solid  rgba(255, 255, 255, 0.08);
+   z-index: 1;
+   /* box-shadow: 0 2px 10px rgba(0,0,0,0.5); */
+}
+
+.video-card {
+  height: 6vh;
+  width: 27vw;
+  border-radius: 1rem;
+  margin: 2px;
+  display: flex;
+  color: rgba(255, 255, 255, 0.9);
+  align-items: center;
+  position: relative;
+}
+.video-card:hover{
+ background-color:rgba(255, 255, 255, 0.08) ;
+}
+.video-card img{
+  height: 2.5rem;
+  width: 2.5rem;
+  margin-left: 1rem;
+  border-radius: 5px;
+}
+.card-text-container{
+  margin-left: 1rem;
+
+}
+.card-text-container :hover{
+  cursor: pointer;
+
+}
+.card-text-container p{
+  font-size: small;
+  font-weight: 600;
+  margin: 0;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  opacity: 0.8;
+  width: 90%;
+}
+
+.card-text-container span{
+  font-size: small;
+  opacity: 0.4;
+  
+}
+.add-song {
+  height: 0.9rem;
+  width: 0.9rem;
+  position: absolute;
+  right: 0;
+  margin-right: 1rem;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-song :hover{
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.6);
+  border-color: rgba(255, 255, 255, 1);
+}
+.add-song i{
+  position: relative;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.recent-title {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  margin: 6px 12px;
+  font-weight: 600;
+}
+
+.songs-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.songs-list.scrollable {
+    max-height: calc(6vh * 5 + 10px); /* exactly 5 cards */
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* custom scrollbar to match your dark theme */
+.songs-list.scrollable::-webkit-scrollbar {
+    width: 4px;
+}
+
+.songs-list.scrollable::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.songs-list.scrollable::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+}
+
+.songs-list.scrollable::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}

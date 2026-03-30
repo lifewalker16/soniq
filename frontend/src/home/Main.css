@@ -1,0 +1,6 @@
+.main{
+    height: 93vh;
+    width: 100%;
+    background-color: pink;
+    display: flex;
+}

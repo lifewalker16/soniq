@@ -1,0 +1,65 @@
+.audio-window {
+  position: relative;
+  height: 84vh;
+  width: 100%;
+  min-height: 300px;
+  overflow: hidden;
+}
+
+/* Song info overlay at the bottom */
+.audio-window-info {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.audio-window-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  /* text-shadow: 0 0 12px rgba(252, 66, 255, 0.8); */
+  letter-spacing: 0.04em;
+}
+
+.audio-window-uploader {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+@keyframes spin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.audio-window-thumbnail {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  z-index: 5;
+  pointer-events: none;
+  box-shadow: 0 0 24px rgba(255, 255, 255, 0.6),
+              0 0 48px rgba(66, 252, 255, 0.3);
+  /* Animation always defined, toggled via play-state */
+  animation: spin 20s linear infinite;
+  animation-play-state: paused;
+  
+}
+
+.audio-window-thumbnail.spinning {
+  animation-play-state: running;
+}
+
+.audio-window-thumbnail.paused {
+  animation-play-state: paused;
+}
