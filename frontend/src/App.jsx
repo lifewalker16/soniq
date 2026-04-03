@@ -42,7 +42,7 @@ function App() {
           { 
           (results.length > 0 || showRecent)  && <Results/>
           }
-          <AudioWindow/> 
+         {/* // <AudioWindow/>  */}
           <MusicPlayer/>
           
       </MyContext.Provider>
