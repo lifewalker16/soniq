@@ -72,7 +72,7 @@ function MusicPlayer(){
 
       const fetchAudio =async()=>{
         try{
-          const res = await fetch(`http://localhost:3000/stream`, {
+          const res = await fetch(`https://soniq-nmto.onrender.com/stream`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(currentSong),

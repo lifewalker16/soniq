@@ -10,7 +10,7 @@ function NavBar(){
         if (!query.trim()) return;
        
         try{
-            const res=await fetch(`http://localhost:3000/search?q=${query}`);
+            const res=await fetch(`https://soniq-nmto.onrender.com/search?q=${query}`);
             const data = await res.json();
             setResults(data);
         }catch(err){
@@ -23,7 +23,7 @@ function NavBar(){
         
         if (!query.trim() && recentSongs.length === 0) {
         try {
-            const res = await fetch("http://localhost:3000/recent");
+            const res = await fetch("https://soniq-nmto.onrender.com/recent");
             const data = await res.json();
             setRecentSongs(data);
         } catch (err) {

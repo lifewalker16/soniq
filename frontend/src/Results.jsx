@@ -31,7 +31,7 @@ function Results(){
     const handleDelete=async(id)=>{
      
         try{
-            await fetch(`http://localhost:3000/recent/${id}`,{
+            await fetch(`https://soniq-nmto.onrender.com/recent/${id}`,{
                 method:"DELETE"
             });
             setRecentSongs(prev => prev.filter(song => song.songId !== id));
